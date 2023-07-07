@@ -5,4 +5,5 @@
     <string name="horde">Horde</string>
     <string name="neutral">Neutral</string>
     <string name="error">Error</string>
+    <string name="back_button">back button</string>
 </resources>

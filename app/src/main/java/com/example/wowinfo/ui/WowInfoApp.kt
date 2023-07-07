@@ -24,9 +24,13 @@ fun WowInfoApp(
         if (windowSize.widthSizeClass == WindowWidthSizeClass.Compact) {
             WowInfoNavigationType.BOTTOM_BAR
         } else when (windowSize.heightSizeClass) {
-            WindowHeightSizeClass.Compact -> WowInfoNavigationType.BOTTOM_BAR
-            WindowHeightSizeClass.Medium -> WowInfoNavigationType.NAVIGATION_DRAWER
+            WindowHeightSizeClass.Compact,
             WindowHeightSizeClass.Expanded -> WowInfoNavigationType.NAVIGATION_RAIL
+            WindowHeightSizeClass.Medium -> WowInfoNavigationType.NAVIGATION_DRAWER
             else -> WowInfoNavigationType.BOTTOM_BAR
         }
+
+    val windowHeight = windowSize.heightSizeClass
+
+    WowInfoScreen(windowHeight = windowHeight, uiState = uiState, navigationType = navigationType)
 }

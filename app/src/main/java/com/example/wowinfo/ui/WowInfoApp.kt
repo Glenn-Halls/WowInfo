@@ -7,7 +7,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.wowinfo.model.Faction
 import com.example.wowinfo.ui.util.WowInfoNavigationType
+
 
 @Composable
 fun WowInfoApp(
@@ -15,9 +18,12 @@ fun WowInfoApp(
     modifier: Modifier = Modifier
 ) {
     // Create an instance of WowInfoViewModel
-    val viewModel = WowInfoViewModel()
+    val viewModel: WowInfoViewModel = viewModel()
     // Create an observable reference to uiState
     val uiState by viewModel.uiState.collectAsState()
+
+    // Window height determines the layout of some Composables
+    val windowHeight = windowSize.heightSizeClass
 
     // Define navigation type based on WindowSize dimensions
     val navigationType: WowInfoNavigationType =
@@ -30,7 +36,12 @@ fun WowInfoApp(
             else -> WowInfoNavigationType.BOTTOM_BAR
         }
 
-    val windowHeight = windowSize.heightSizeClass
-
-    WowInfoScreen(windowHeight = windowHeight, uiState = uiState, navigationType = navigationType)
+    WowInfoScreen(
+        windowHeight = windowHeight,
+        navigationType = navigationType,
+        uiState = uiState,
+        onTabPressed = { clickedFaction: Faction ->
+            viewModel.updateCurrentFaction(newFaction = clickedFaction)
+        }
+    )
 }

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">WowInfo</string>
+    <string name="alliance">Alliance</string>
+    <string name="all">All</string>
+    <string name="horde">Horde</string>
+    <string name="neutral">Neutral</string>
+    <string name="error">Error</string>
 </resources>

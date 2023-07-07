@@ -1,8 +1,8 @@
 package com.example.wowinfo.ui.theme
 import androidx.compose.ui.graphics.Color
 
-val Wow_Alliance = Color(0xAA0000FF)
-val Wow_Horde = Color(0xAAFF0000)
+val warcraft_alliance = Color(0xAA0000FF)
+val warcraft_horde = Color(0xAAFF0000)
 
 val md_theme_light_primary = Color(0xFF656100)
 val md_theme_light_onPrimary = Color(0xFFFFFFFF)

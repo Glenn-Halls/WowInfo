@@ -108,6 +108,7 @@ fun WowInfoTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
+        shapes = Shapes,
         content = content
     )
 }

@@ -12,13 +12,18 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
-import androidx.compose.material3.NavigationRailItemDefaults.colors
+import androidx.compose.material3.NavigationRailItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -32,7 +37,7 @@ import com.example.wowinfo.ui.util.WowInfoNavigationType
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WowInfoScreen(
-    windowHeight: WindowHeightSizeClass,
+    windowSize: WindowSizeClass,
     navigationType: WowInfoNavigationType,
     uiState: WowInfoUiState,
     viewModel: WowInfoViewModel,
@@ -41,6 +46,10 @@ fun WowInfoScreen(
 ) {
     // Get list of factions for navigation component
     val factionNavigationItems = viewModel.factionList
+    // Get window width from window size
+    val windowWidth = windowSize.widthSizeClass
+    // Get window height from window size
+    val windowHeight = windowSize.heightSizeClass
 
     Scaffold(
         topBar = {
@@ -49,18 +58,29 @@ fun WowInfoScreen(
                     onUpButtonClick = { /*TODO*/}
                 )
             }
+        },
+        bottomBar = {
+            if (windowWidth == WindowWidthSizeClass.Compact) {
+                WowInfoBottomBar(
+                    currentTab = uiState.currentFaction,
+                    onTabPressed = onTabPressed,
+                    bottomBarContent = factionNavigationItems
+                )
+            }
         }
     ) { innerPadding ->
         Row(modifier = Modifier.padding(innerPadding)){
-            WowInfoNavigationRail(
-                currentTab = uiState.currentFaction,
-                onTabPressed = onTabPressed,
-                navRailContent = factionNavigationItems
-            )
+            if (windowWidth != WindowWidthSizeClass.Compact) {
+                WowInfoNavigationRail(
+                    currentTab = uiState.currentFaction,
+                    onTabPressed = onTabPressed,
+                    navRailContent = factionNavigationItems
+                )
+            }
             // Placeholder: showing height class and nav type
             Column(modifier = Modifier.padding(horizontal = 4.dp)){
                 Text(
-                    text = "Height Class: $windowHeight"
+                    text = "Height Class: $windowWidth"
                 )
                 Text(
                     text = "Navigation Type: $navigationType"
@@ -73,7 +93,6 @@ fun WowInfoScreen(
                 WowInfoRaceList(raceList = uiState.raceList)
             }
         }
-
     }
 }
 
@@ -123,7 +142,7 @@ private fun WowInfoNavigationRail(
                         modifier = Modifier.size(50.dp)
                     )
                 },
-                colors = colors(
+                colors = NavigationRailItemDefaults.colors(
                     indicatorColor = MaterialTheme.colorScheme.onPrimary,
                     unselectedIconColor = MaterialTheme.colorScheme.onPrimary
                 ),
@@ -131,6 +150,37 @@ private fun WowInfoNavigationRail(
                     .weight(1f)
                     .background(navItem.color ?: MaterialTheme.colorScheme.primary)
             )
+        }
+    }
+}
+
+@Composable
+private fun WowInfoBottomBar(
+    currentTab: Faction,
+    onTabPressed: (Faction) -> Unit,
+    bottomBarContent: List<Faction>,
+    modifier: Modifier = Modifier,
+) {
+    NavigationBar(modifier = modifier) {
+        bottomBarContent.forEach {
+            NavigationBarItem(
+                selected = currentTab == it,
+                onClick = { onTabPressed(it) },
+                icon = {
+                    Icon(
+                        painter = painterResource(id = it.logo),
+                        contentDescription = stringResource(id = it.name),
+                        modifier = Modifier.size(50.dp)
+                    )
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    indicatorColor = MaterialTheme.colorScheme.onPrimary,
+                    unselectedIconColor = MaterialTheme.colorScheme.onPrimary
+                ),
+                modifier = Modifier
+                    .weight(1f)
+                    .background(it.color ?: MaterialTheme.colorScheme.primary)
+                )
         }
     }
 }

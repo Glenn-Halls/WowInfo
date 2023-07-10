@@ -22,9 +22,6 @@ fun WowInfoApp(
     // Create an observable reference to uiState
     val uiState by viewModel.uiState.collectAsState()
 
-    // Window height determines the layout of some Composables
-    val windowHeight = windowSize.heightSizeClass
-
     // Define navigation type based on WindowSize dimensions
     val navigationType: WowInfoNavigationType =
         if (windowSize.widthSizeClass == WindowWidthSizeClass.Compact) {
@@ -37,7 +34,7 @@ fun WowInfoApp(
         }
 
     WowInfoScreen(
-        windowHeight = windowHeight,
+        windowSize = windowSize,
         navigationType = navigationType,
         uiState = uiState,
         viewModel = viewModel,

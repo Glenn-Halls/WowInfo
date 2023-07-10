@@ -11,5 +11,7 @@ data class WowInfoUiState(
         color = null,
         logo = R.drawable.ic_launcher_background,
     ),
-    val raceList: List<Race> = RaceList.neutralRaces
+    val raceList: List<Race> = RaceList.neutralRaces,
+    val currentRace: Race?,
+    val isShowingDetail: Boolean = false,
 )

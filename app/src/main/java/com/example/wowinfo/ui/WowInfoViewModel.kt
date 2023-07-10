@@ -5,6 +5,7 @@ import RaceList
 import androidx.lifecycle.ViewModel
 import com.example.wowinfo.R
 import com.example.wowinfo.model.Faction
+import com.example.wowinfo.model.Race
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -12,7 +13,7 @@ import kotlinx.coroutines.flow.update
 class WowInfoViewModel : ViewModel() {
 
     // Create observable state holder
-    private val _uiState = MutableStateFlow(WowInfoUiState())
+    private val _uiState = MutableStateFlow(WowInfoUiState(currentRace = null))
     // Create accessor to state values
     val uiState: StateFlow<WowInfoUiState> = _uiState
     // List of available factions
@@ -25,12 +26,13 @@ class WowInfoViewModel : ViewModel() {
     private fun initialiseUiState() {
         _uiState.value =
             WowInfoUiState(
-                Faction(
+                currentFaction = Faction(
                     name = R.string.neutral,
                     color = null,
                     logo = R.drawable.alliance_horde_logo,
                 ),
-                RaceList.neutralRaces
+                raceList = RaceList.neutralRaces,
+                currentRace = null,
             )
     }
 
@@ -45,6 +47,15 @@ class WowInfoViewModel : ViewModel() {
                     R.string.horde -> RaceList.hordeRaces
                     else -> RaceList.neutralRaces
                 }
+            )
+        }
+    }
+
+    fun updateCurrentRace(newRace: Race) {
+        _uiState.update {
+            it.copy(
+                currentRace = newRace,
+                isShowingDetail = true
             )
         }
     }

@@ -40,7 +40,7 @@ fun WowInfoScreen(
 ) {
 
     // Get list of factions to populate navigation
-    val factionNavigationItems = FactionList.factionList
+    val factionNavigationItems = FactionList.factions
 
     Scaffold(
         topBar = {

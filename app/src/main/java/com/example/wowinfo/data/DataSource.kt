@@ -8,31 +8,33 @@ import com.example.wowinfo.ui.theme.warcraft_alliance
 import com.example.wowinfo.ui.theme.warcraft_horde
 
 object FactionList {
-
-    val factionList = listOf(
+    val factions = listOf(
         Faction(
             name = R.string.alliance,
             color = warcraft_alliance,
-            logo = R.drawable.alliance_logo
+            logo = R.drawable.alliance_logo,
+            races = RaceList.allianceRaces
         ),
         Faction(
             name = R.string.neutral,
             color = null,
-            logo = R.drawable.alliance_horde_logo
+            logo = R.drawable.alliance_horde_logo,
+            races = RaceList.neutralRaces,
         ),
         Faction(
             name = R.string.horde,
             color = warcraft_horde,
-            logo = R.drawable.horde_logo
+            logo = R.drawable.horde_logo,
+            races = RaceList.hordeRaces
         )
     )
 }
 
 object RaceList {
 
-    val alliance = FactionList.factionList[0]
-    val neutral = FactionList.factionList[1]
-    val horde = FactionList.factionList[2]
+    private val alliance = FactionList.factions[0]
+    private val neutral = FactionList.factions[1]
+    private val horde = FactionList.factions[2]
 
     val allianceRaces: List<Race> = listOf(
         Race(

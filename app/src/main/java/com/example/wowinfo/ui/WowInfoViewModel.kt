@@ -2,6 +2,7 @@ package com.example.wowinfo.ui
 
 import androidx.lifecycle.ViewModel
 import com.example.wowinfo.R
+import com.example.wowinfo.data.RaceList
 import com.example.wowinfo.model.Faction
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,7 +24,8 @@ class WowInfoViewModel : ViewModel() {
                 Faction(
                     name = R.string.neutral,
                     color = null,
-                    logo = R.drawable.alliance_horde_logo
+                    logo = R.drawable.alliance_horde_logo,
+                    races = RaceList.neutralRaces
                 )
             )
     }

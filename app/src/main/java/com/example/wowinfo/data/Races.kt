@@ -1,34 +1,5 @@
-package com.example.wowinfo.data
-
 import com.example.wowinfo.R
-import com.example.wowinfo.R.drawable.crest_alliance_human
-import com.example.wowinfo.model.Faction
 import com.example.wowinfo.model.Race
-import com.example.wowinfo.ui.theme.warcraft_alliance
-import com.example.wowinfo.ui.theme.warcraft_horde
-
-object FactionList {
-    val factions = listOf(
-        Faction(
-            name = R.string.alliance,
-            color = warcraft_alliance,
-            logo = R.drawable.alliance_logo,
-            races = RaceList.allianceRaces
-        ),
-        Faction(
-            name = R.string.neutral,
-            color = null,
-            logo = R.drawable.alliance_horde_logo,
-            races = RaceList.neutralRaces,
-        ),
-        Faction(
-            name = R.string.horde,
-            color = warcraft_horde,
-            logo = R.drawable.horde_logo,
-            races = RaceList.hordeRaces
-        )
-    )
-}
 
 object RaceList {
 
@@ -40,7 +11,7 @@ object RaceList {
         Race(
             name = R.string.human,
             faction = alliance,
-            crest = crest_alliance_human,
+            crest = R.drawable.crest_alliance_human,
             description = R.string.human_description,
         ),
         Race(

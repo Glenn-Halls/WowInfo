@@ -25,8 +25,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.wowinfo.R
-import com.example.wowinfo.data.FactionList
 import com.example.wowinfo.model.Faction
+import com.example.wowinfo.model.Race
 import com.example.wowinfo.ui.util.WowInfoNavigationType
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,12 +35,12 @@ fun WowInfoScreen(
     windowHeight: WindowHeightSizeClass,
     navigationType: WowInfoNavigationType,
     uiState: WowInfoUiState,
+    viewModel: WowInfoViewModel,
     onTabPressed: (Faction) -> Unit,
     modifier: Modifier = Modifier
 ) {
-
-    // Get list of factions to populate navigation
-    val factionNavigationItems = FactionList.factions
+    // Get list of factions for navigation component
+    val factionNavigationItems = viewModel.factionList
 
     Scaffold(
         topBar = {
@@ -58,7 +58,7 @@ fun WowInfoScreen(
                 navRailContent = factionNavigationItems
             )
             // Placeholder: showing height class and nav type
-            Column{
+            Column(modifier = Modifier.padding(horizontal = 4.dp)){
                 Text(
                     text = "Height Class: $windowHeight"
                 )
@@ -70,6 +70,7 @@ fun WowInfoScreen(
                         stringResource(uiState.currentFaction.name)
                     }"
                 )
+                WowInfoRaceList(raceList = uiState.raceList)
             }
         }
 
@@ -130,6 +131,17 @@ private fun WowInfoNavigationRail(
                     .weight(1f)
                     .background(navItem.color ?: MaterialTheme.colorScheme.primary)
             )
+        }
+    }
+}
+
+@Composable
+private fun WowInfoRaceList(
+    raceList: List<Race>
+) {
+    Column {
+        for (race in raceList) {
+            Text(text = stringResource(id = race.name))
         }
     }
 }

@@ -40,6 +40,7 @@ fun WowInfoApp(
         windowHeight = windowHeight,
         navigationType = navigationType,
         uiState = uiState,
+        viewModel = viewModel,
         onTabPressed = { clickedFaction: Faction ->
             viewModel.updateCurrentFaction(newFaction = clickedFaction)
         }

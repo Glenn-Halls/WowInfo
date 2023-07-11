@@ -120,7 +120,7 @@ object RaceList {
             name = R.string.blood_elf,
             faction = horde,
             crest = R.drawable.crest_horde_troll,
-            description = R.string.troll_description
+            description = R.string.blood_elf_description
         ),
         Race(
             name = R.string.goblin,

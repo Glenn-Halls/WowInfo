@@ -293,16 +293,21 @@ private fun WowInfoRaceDetail(race: Race, modifier: Modifier = Modifier) {
         shape = Shapes.large,
         modifier = modifier
     ) {
-        Column(modifier = Modifier.fillMaxWidth()) {
-
-        }
         Column(modifier = Modifier
-            .padding(dimensionResource(R.dimen.padding_medium))
+            .padding(0.dp)
             .verticalScroll(rememberScrollState())
         ) {
-            Text(text = stringResource(race.name))
-            Spacer(modifier = Modifier.height(20.dp))
-            Text(text = stringResource(race.description))
+            Image(
+                painter = painterResource(
+                    id = R.drawable.wallpaper_dracthyr),
+                contentDescription = null,
+                contentScale = ContentScale.FillWidth
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = stringResource(race.description),
+                modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))
+            )
         }
     }
 

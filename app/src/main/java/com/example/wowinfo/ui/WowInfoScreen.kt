@@ -5,15 +5,19 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
@@ -48,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import com.example.wowinfo.R
 import com.example.wowinfo.model.Faction
 import com.example.wowinfo.model.Race
+import com.example.wowinfo.ui.theme.Shapes
 import com.example.wowinfo.ui.util.WowInfoNavigationType
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -81,7 +86,8 @@ fun WowInfoScreen(
                 WowInfoBottomBar(
                     currentTab = uiState.currentFaction,
                     onTabPressed = onTabPressed,
-                    bottomBarContent = factionNavigationItems
+                    bottomBarContent = factionNavigationItems,
+                    modifier = Modifier.padding(dimensionResource(R.dimen.padding_small)),
                 )
             }
         }
@@ -99,6 +105,17 @@ fun WowInfoScreen(
                 raceList = uiState.raceList,
                 selectedRace = uiState.currentRace,
                 onItemClick = onListClick,
+                modifier = Modifier.weight(1f)
+            )
+            WowInfoRaceDetail(
+                race = uiState.currentRace ?: uiState.raceList[0],
+                modifier = Modifier
+                    .padding(
+                        top = dimensionResource(id = R.dimen.padding_medium),
+                        end = dimensionResource(id = R.dimen.padding_medium)
+                    )
+                    .weight(1f)
+                    .fillMaxHeight()
             )
         }
     }
@@ -229,7 +246,6 @@ private fun WowInfoRaceCard(
         colors = if (isRaceSelected) {
             CardDefaults.cardColors(
                 containerColor = race.faction.color ?: MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
             )
         } else CardDefaults.cardColors(),
         modifier = modifier
@@ -270,10 +286,32 @@ private fun WowInfoRaceCrest(race: Race, modifier: Modifier = Modifier) {
     }
 }
 
+@Composable
+private fun WowInfoRaceDetail(race: Race, modifier: Modifier = Modifier) {
+    Card(
+        elevation = CardDefaults.cardElevation(),
+        shape = Shapes.large,
+        modifier = modifier
+    ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+
+        }
+        Column(modifier = Modifier
+            .padding(dimensionResource(R.dimen.padding_medium))
+            .verticalScroll(rememberScrollState())
+        ) {
+            Text(text = stringResource(race.name))
+            Spacer(modifier = Modifier.height(20.dp))
+            Text(text = stringResource(race.description))
+        }
+    }
+
+}
+
 @Preview(showSystemUi = true)
 @Composable
 fun CardPreview() {
     val raceList: List<Race> = RaceList.allianceRaces
     val race: Race = RaceList.allianceRaces[3]
-    WowInfoRaceList(raceList = raceList, selectedRace = race, onItemClick = {})
+    WowInfoRaceDetail(race = race)
 }

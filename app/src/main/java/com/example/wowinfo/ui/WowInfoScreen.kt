@@ -94,7 +94,10 @@ fun WowInfoScreen(
                 )
             }
             // Placeholder: showing height class and nav type
-            WowInfoRaceList(raceList = uiState.raceList, onItemClick = { /*TODO*/ })
+            WowInfoRaceList(
+                raceList = uiState.raceList,
+                selectedRace = uiState.currentRace,
+                onItemClick = { /*TODO*/ })
         }
     }
 }
@@ -191,6 +194,7 @@ private fun WowInfoBottomBar(
 @Composable
 private fun WowInfoRaceList(
     raceList: List<Race>,
+    selectedRace: Race?,
     onItemClick: (Race) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -200,7 +204,10 @@ private fun WowInfoRaceList(
         modifier = modifier,
     ) {
         items(raceList) {
-            WowInfoRaceCard(race = it, onItemClick = onItemClick)
+            WowInfoRaceCard(
+                race = it,
+                isRaceSelected = it == selectedRace,
+                onItemClick = onItemClick)
         }
     }
 }
@@ -209,12 +216,19 @@ private fun WowInfoRaceList(
 @Composable
 private fun WowInfoRaceCard(
     race: Race,
+    isRaceSelected: Boolean,
     onItemClick: (Race) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
         elevation = CardDefaults.cardElevation(),
         onClick = { onItemClick },
+        colors = if (isRaceSelected) {
+            CardDefaults.cardColors(
+                containerColor = race.faction.color ?: MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+            )
+        } else CardDefaults.cardColors()
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -255,7 +269,7 @@ private fun WowInfoRaceCrest(race: Race, modifier: Modifier = Modifier) {
 @Preview(showSystemUi = true)
 @Composable
 fun CardPreview() {
-    val raceList: List<Race> = RaceList.hordeRaces
-    val race: Race = RaceList.allianceRaces[7]
-    WowInfoRaceList(raceList = raceList, onItemClick = {})
+    val raceList: List<Race> = RaceList.allianceRaces
+    val race: Race = RaceList.allianceRaces[3]
+    WowInfoRaceList(raceList = raceList, selectedRace = race, onItemClick = {})
 }

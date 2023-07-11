@@ -5,13 +5,15 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
@@ -92,19 +94,7 @@ fun WowInfoScreen(
                 )
             }
             // Placeholder: showing height class and nav type
-            Column(modifier = Modifier.padding(horizontal = 4.dp)){
-                Text(
-                    text = "Height Class: $windowWidth"
-                )
-                Text(
-                    text = "Navigation Type: $navigationType"
-                )
-                Text(
-                    text = "Faction Selected: ${
-                        stringResource(uiState.currentFaction.name)
-                    }"
-                )
-            }
+            WowInfoRaceList(raceList = uiState.raceList, onItemClick = { /*TODO*/ })
         }
     }
 }
@@ -198,6 +188,23 @@ private fun WowInfoBottomBar(
     }
 }
 
+@Composable
+private fun WowInfoRaceList(
+    raceList: List<Race>,
+    onItemClick: (Race) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    LazyColumn(
+        contentPadding = PaddingValues(dimensionResource(R.dimen.padding_medium)),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
+        modifier = modifier,
+    ) {
+        items(raceList) {
+            WowInfoRaceCard(race = it, onItemClick = onItemClick)
+        }
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun WowInfoRaceCard(
@@ -248,6 +255,7 @@ private fun WowInfoRaceCrest(race: Race, modifier: Modifier = Modifier) {
 @Preview(showSystemUi = true)
 @Composable
 fun CardPreview() {
+    val raceList: List<Race> = RaceList.hordeRaces
     val race: Race = RaceList.allianceRaces[7]
-    WowInfoRaceCard(race, { (race) })
+    WowInfoRaceList(raceList = raceList, onItemClick = {})
 }

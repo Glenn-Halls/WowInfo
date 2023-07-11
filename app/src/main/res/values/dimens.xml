@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="padding_small">4dp</dimen>
+    <dimen name="padding_medium">8dp</dimen>
     <dimen name="card_height">70dp</dimen>
     <dimen name="card_text_fill_percent">.9f</dimen>
     <dimen name="race_crest_size">50dp</dimen>

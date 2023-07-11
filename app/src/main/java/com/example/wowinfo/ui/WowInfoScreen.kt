@@ -1,12 +1,21 @@
 package com.example.wowinfo.ui
 
+import RaceList
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -25,9 +34,14 @@ import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.wowinfo.R
 import com.example.wowinfo.model.Faction
@@ -90,7 +104,6 @@ fun WowInfoScreen(
                         stringResource(uiState.currentFaction.name)
                     }"
                 )
-                WowInfoRaceList(raceList = uiState.raceList)
             }
         }
     }
@@ -185,13 +198,56 @@ private fun WowInfoBottomBar(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun WowInfoRaceList(
-    raceList: List<Race>
+private fun WowInfoRaceCard(
+    race: Race,
+    onItemClick: (Race) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    Column {
-        for (race in raceList) {
-            Text(text = stringResource(id = race.name))
+    Card(
+        elevation = CardDefaults.cardElevation(),
+        onClick = { onItemClick },
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(dimensionResource(R.dimen.card_height))
+                .padding(4.dp)
+        ) {
+            WowInfoRaceCrest(
+                race = race,
+                modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_small))
+            )
+            Text(
+                text = stringResource(id = race.name),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.displayMedium,
+            )
+            Spacer(modifier = Modifier.padding(dimensionResource(R.dimen.padding_small)))
         }
     }
+}
+
+@Composable
+private fun WowInfoRaceCrest(race: Race, modifier: Modifier = Modifier) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.size(dimensionResource(R.dimen.race_crest_size))) {
+        Image(
+            painter = painterResource(race.crest),
+            contentDescription = null,
+            alignment = Alignment.Center,
+            contentScale = ContentScale.Fit,
+        )
+    }
+}
+
+@Preview(showSystemUi = true)
+@Composable
+fun CardPreview() {
+    val race: Race = RaceList.allianceRaces[7]
+    WowInfoRaceCard(race, { (race) })
 }

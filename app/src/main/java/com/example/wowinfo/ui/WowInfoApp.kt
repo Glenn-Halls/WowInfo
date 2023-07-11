@@ -8,7 +8,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.wowinfo.model.Faction
 import com.example.wowinfo.ui.util.WowInfoNavigationType
 
 
@@ -38,8 +37,7 @@ fun WowInfoApp(
         navigationType = navigationType,
         uiState = uiState,
         viewModel = viewModel,
-        onTabPressed = { clickedFaction: Faction ->
-            viewModel.updateCurrentFaction(newFaction = clickedFaction)
-        }
+        onTabPressed = { viewModel.updateCurrentFaction(it) },
+        onListClick = { viewModel.updateCurrentRace(it) },
     )
 }

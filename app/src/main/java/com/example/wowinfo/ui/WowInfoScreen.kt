@@ -58,6 +58,7 @@ fun WowInfoScreen(
     uiState: WowInfoUiState,
     viewModel: WowInfoViewModel,
     onTabPressed: (Faction) -> Unit,
+    onListClick: (Race) -> Unit,
     modifier: Modifier = Modifier
 ) {
     // Get list of factions for navigation component
@@ -97,7 +98,8 @@ fun WowInfoScreen(
             WowInfoRaceList(
                 raceList = uiState.raceList,
                 selectedRace = uiState.currentRace,
-                onItemClick = { /*TODO*/ })
+                onItemClick = onListClick,
+            )
         }
     }
 }
@@ -207,7 +209,8 @@ private fun WowInfoRaceList(
             WowInfoRaceCard(
                 race = it,
                 isRaceSelected = it == selectedRace,
-                onItemClick = onItemClick)
+                onItemClick = onItemClick
+            )
         }
     }
 }
@@ -222,13 +225,14 @@ private fun WowInfoRaceCard(
 ) {
     Card(
         elevation = CardDefaults.cardElevation(),
-        onClick = { onItemClick },
+        onClick = { onItemClick(race) },
         colors = if (isRaceSelected) {
             CardDefaults.cardColors(
                 containerColor = race.faction.color ?: MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary,
             )
-        } else CardDefaults.cardColors()
+        } else CardDefaults.cardColors(),
+        modifier = modifier
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

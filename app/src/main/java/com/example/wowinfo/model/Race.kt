@@ -8,4 +8,5 @@ data class Race(
     val faction: Faction,
     @DrawableRes val crest: Int,
     @StringRes val description: Int,
+    @DrawableRes val wallpaper: Int,
 )

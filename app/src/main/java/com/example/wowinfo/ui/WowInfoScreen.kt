@@ -1,6 +1,6 @@
 package com.example.wowinfo.ui
 
-import RaceList
+import com.example.wowinfo.data.RaceList
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -59,7 +59,6 @@ import com.example.wowinfo.ui.util.WowInfoNavigationType
 @Composable
 fun WowInfoScreen(
     windowSize: WindowSizeClass,
-    navigationType: WowInfoNavigationType,
     uiState: WowInfoUiState,
     viewModel: WowInfoViewModel,
     onTabPressed: (Faction) -> Unit,
@@ -72,17 +71,27 @@ fun WowInfoScreen(
     val windowWidth = windowSize.widthSizeClass
     // Get window height from window size
     val windowHeight = windowSize.heightSizeClass
+    // Define navigation type based on WindowSize dimensions
+    val navigationType: WowInfoNavigationType =
+        if (windowSize.widthSizeClass == WindowWidthSizeClass.Compact) {
+            WowInfoNavigationType.BOTTOM_BAR
+        } else when (windowSize.heightSizeClass) {
+            WindowHeightSizeClass.Compact,
+            WindowHeightSizeClass.Expanded -> WowInfoNavigationType.NAVIGATION_RAIL
+            WindowHeightSizeClass.Medium -> WowInfoNavigationType.NAVIGATION_DRAWER
+            else -> WowInfoNavigationType.BOTTOM_BAR
+        }
 
     Scaffold(
         topBar = {
             if (windowHeight != WindowHeightSizeClass.Compact) {
                 WowInfoTopBar(
-                    onUpButtonClick = { /*TODO*/}
+                    onUpButtonClick = { viewModel.resetRace() }
                 )
             }
         },
         bottomBar = {
-            if (windowWidth == WindowWidthSizeClass.Compact) {
+            if (navigationType == WowInfoNavigationType.BOTTOM_BAR) {
                 WowInfoBottomBar(
                     currentTab = uiState.currentFaction,
                     onTabPressed = onTabPressed,
@@ -105,18 +114,22 @@ fun WowInfoScreen(
                 raceList = uiState.raceList,
                 selectedRace = uiState.currentRace,
                 onItemClick = onListClick,
-                modifier = Modifier.weight(1f)
+                modifier = if (navigationType == WowInfoNavigationType.BOTTOM_BAR && uiState.isShowingDetail) {
+                    Modifier.fillMaxWidth(0f)
+                } else if (navigationType == WowInfoNavigationType.BOTTOM_BAR) {
+                    Modifier.fillMaxWidth()
+                }
+                else {Modifier.fillMaxWidth(.5f)}
             )
-            WowInfoRaceDetail(
-                race = uiState.currentRace ?: uiState.raceList[0],
-                modifier = Modifier
-                    .padding(
-                        top = dimensionResource(id = R.dimen.padding_medium),
-                        end = dimensionResource(id = R.dimen.padding_medium)
-                    )
-                    .weight(1f)
-                    .fillMaxHeight()
-            )
+            if (uiState.currentRace != null) {
+                WowInfoRaceDetail(
+                    race = uiState.currentRace,
+                    modifier = Modifier
+                        .padding(dimensionResource(R.dimen.padding_medium))
+                        .weight(1f)
+                        .fillMaxHeight()
+                )
+            }
         }
     }
 }

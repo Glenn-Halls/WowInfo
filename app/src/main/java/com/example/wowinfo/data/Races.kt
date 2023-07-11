@@ -1,10 +1,13 @@
+package com.example.wowinfo.data
+
+import FactionList
 import com.example.wowinfo.R
 import com.example.wowinfo.model.Race
 
 object RaceList {
 
     private val alliance = FactionList.factions[0]
-    private val neutral = FactionList.factions[1]
+    val neutral = FactionList.factions[1]
     private val horde = FactionList.factions[2]
 
     val allianceRaces: List<Race> = listOf(

@@ -1,6 +1,6 @@
 package com.example.wowinfo.ui
 
-import RaceList
+import com.example.wowinfo.data.RaceList
 import com.example.wowinfo.R
 import com.example.wowinfo.model.Faction
 import com.example.wowinfo.model.Race

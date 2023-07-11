@@ -1,7 +1,7 @@
 package com.example.wowinfo.ui
 
 import FactionList
-import RaceList
+import com.example.wowinfo.data.RaceList
 import androidx.lifecycle.ViewModel
 import com.example.wowinfo.R
 import com.example.wowinfo.model.Faction
@@ -18,6 +18,14 @@ class WowInfoViewModel : ViewModel() {
     val uiState: StateFlow<WowInfoUiState> = _uiState
     // List of available factions
     val factionList = FactionList.factions
+    // Empty Race selection
+    val EmptyRace = Race(
+        name = R.string.empty,
+        faction = RaceList.neutral,
+        crest = R.drawable.crest_horde_vulpera,
+        description = R.string.empty,
+        wallpaper = R.drawable.transparent_picture
+    )
 
 
     // Initialise ViewModel to default values
@@ -56,6 +64,15 @@ class WowInfoViewModel : ViewModel() {
             it.copy(
                 currentRace = newRace,
                 isShowingDetail = true
+            )
+        }
+    }
+
+    fun resetRace() {
+        _uiState.update {
+            it.copy(
+                currentRace = null,
+                isShowingDetail = false
             )
         }
     }

@@ -1,6 +1,6 @@
 package com.example.wowinfo.ui
 
-import com.example.wowinfo.data.RaceList
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -47,10 +47,10 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.wowinfo.R
 import com.example.wowinfo.model.Faction
+import com.example.wowinfo.model.Layout
 import com.example.wowinfo.model.Race
 import com.example.wowinfo.ui.theme.Shapes
 import com.example.wowinfo.ui.util.WowInfoNavigationType
@@ -81,7 +81,21 @@ fun WowInfoScreen(
             WindowHeightSizeClass.Medium -> WowInfoNavigationType.NAVIGATION_DRAWER
             else -> WowInfoNavigationType.BOTTOM_BAR
         }
+    // Define layout based on nav type and race selection
+    val layout = if (navigationType == WowInfoNavigationType.BOTTOM_BAR) {
+        if (uiState.isShowingDetail) {
+            Layout.Detail
+        } else {
+            Layout.List
+        }
+    } else Layout.ListAndDetail
 
+    // Back button will reset race if race selected, close app if no race selected
+    if (uiState.currentRace != null) {
+        BackHandler {
+            viewModel.resetRace()
+        }
+    }
     Scaffold(
         topBar = {
             if (windowHeight != WindowHeightSizeClass.Compact) {
@@ -109,18 +123,14 @@ fun WowInfoScreen(
                     navRailContent = factionNavigationItems
                 )
             }
-            // Placeholder: showing height class and nav type
-            WowInfoRaceList(
-                raceList = uiState.raceList,
-                selectedRace = uiState.currentRace,
-                onItemClick = onListClick,
-                modifier = if (navigationType == WowInfoNavigationType.BOTTOM_BAR && uiState.isShowingDetail) {
-                    Modifier.fillMaxWidth(0f)
-                } else if (navigationType == WowInfoNavigationType.BOTTOM_BAR) {
-                    Modifier.fillMaxWidth()
-                }
-                else {Modifier.fillMaxWidth(.5f)}
-            )
+            if (layout != Layout.Detail) {
+                WowInfoRaceList(
+                    raceList = uiState.raceList,
+                    selectedRace = uiState.currentRace,
+                    layout = layout,
+                    onItemClick = onListClick,
+                )
+            }
             if (uiState.currentRace != null) {
                 WowInfoRaceDetail(
                     race = uiState.currentRace,
@@ -227,13 +237,22 @@ private fun WowInfoBottomBar(
 private fun WowInfoRaceList(
     raceList: List<Race>,
     selectedRace: Race?,
+    layout: Layout,
     onItemClick: (Race) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val screenWidth = if (layout == Layout.ListAndDetail) 0.5f else 1f
+    val defaultPadding = dimensionResource(id = R.dimen.padding_medium)
+    val rightPadding = if (layout == Layout.ListAndDetail) 0.dp else defaultPadding
     LazyColumn(
-        contentPadding = PaddingValues(dimensionResource(R.dimen.padding_medium)),
+        contentPadding = PaddingValues(
+            start = defaultPadding,
+            top = defaultPadding,
+            end = rightPadding,
+            bottom = defaultPadding
+        ),
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
-        modifier = modifier,
+        modifier = modifier.fillMaxWidth(screenWidth)
     ) {
         items(raceList) {
             WowInfoRaceCard(
@@ -300,7 +319,9 @@ private fun WowInfoRaceCrest(race: Race, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun WowInfoRaceDetail(race: Race, modifier: Modifier = Modifier) {
+private fun WowInfoRaceDetail(
+    race: Race,
+    modifier: Modifier = Modifier) {
     Card(
         elevation = CardDefaults.cardElevation(),
         shape = Shapes.large,
@@ -324,12 +345,4 @@ private fun WowInfoRaceDetail(race: Race, modifier: Modifier = Modifier) {
         }
     }
 
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun CardPreview() {
-    val raceList: List<Race> = RaceList.allianceRaces
-    val race: Race = RaceList.allianceRaces[3]
-    WowInfoRaceDetail(race = race)
 }
